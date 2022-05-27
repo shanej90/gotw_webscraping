@@ -1,0 +1,6 @@
+bs4>=0.0.1
+DateTime>=4.4
+lxml>=4.8.0
+selenium>=4.1.5
+skimpy>=0.0.5
+webdriver-manager>=3.7.0
