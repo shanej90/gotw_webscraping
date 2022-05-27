@@ -6,6 +6,14 @@ GotW is a web portal for accessing data on grants funded by the UK's [Engineerin
 
 The package automatically generates a list of all panels by interacting with the website via `selenium`. From this list one can then go to specific panel pages and scrape the data from them, returning a `pandas` dataframe containing all pertinent details.
 
+## Installation
+
+For now, gotw_webscraping is only available via [TestPyPi](https://test.pypi.org/project/gotw_webscraping). You can install it using the following command:
+
+``` {python}
+py -m pip install --index-url https://test.pypi.org/simple/ gotw_webscraping
+```
+
 ## Important note about operating systems
 
 This package relies on a Microsoft Edge driver to scrape the data, so you need to be on Windows with Edge isntalled for it to work.
