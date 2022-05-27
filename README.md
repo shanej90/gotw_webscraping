@@ -8,10 +8,10 @@ The package automatically generates a list of all panels by interacting with the
 
 ## Installation
 
-For now, gotw_webscraping is only available via [TestPyPi](https://test.pypi.org/project/gotw-webscraping-shanej90/0.0.1/). You can install it using the following command:
+For now, gotw_webscraping is only available via [TestPyPi](https://test.pypi.org/project/gotw-webscraping-shanej90/0.0.2/). You can install it using the following command:
 
 ``` {python}
-pip install -i https://test.pypi.org/simple/ gotw-webscraping-shanej90==0.0.1
+pip install -i https://test.pypi.org/simple/ gotw-webscraping-shanej90==0.0.2
 ```
 
 ## Important note about operating systems
