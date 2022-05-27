@@ -1,2 +1,6 @@
+#distirbution
+dist/
+*.egg-info/
+
 #virtual environment
 .venv
