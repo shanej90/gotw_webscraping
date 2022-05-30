@@ -19,7 +19,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 setuptools.setup(
     name="gotw-webscraping-shanej90", 
-    version="0.0.3",
+    version="0.0.4",
     author="Shane Jackson",
     author_email="shane.jackson@gmx.co.uk",
     description="Scraping panel data from the Grants on the Web webpages",
