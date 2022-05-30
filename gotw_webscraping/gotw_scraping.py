@@ -8,7 +8,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.edge.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
-from skimpy import clean_columns
 import time
 from urllib import request
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
@@ -142,7 +141,17 @@ def retrieve_panel_decsions(url):
             
         #headers
         df = df.rename(columns = df.iloc[0])
-        df = clean_columns(df)   
+        
+        #tidy up headers
+        def tidy_columns(c):
+            stripped = c.strip()
+            lower = stripped.lower()
+            nospace = lower.replace(" ", "_")
+            nopct = nospace.replace("%", "pct")
+            nochr = nopct.translate ({ord(c): "" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
+            return nochr  
+        
+        df = tidy_columns(df)
         
         #remove unncessary rows
         df = df.drop([0, 2, 3, 4])   

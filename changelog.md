@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.4
+
+- Removed dependency on `skimpy` due to conflicts.
+
 ## 0.0.3
 
 - Another tweak to version numbers to sort readme on TestPyPi. I promise I know what I'm doing now.
