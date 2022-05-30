@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.11
+
+- Remembered to port changes from notebook this time.
+
 ## 0.0.10
 
 - Changed method for filtering rows in `tidy_tables` function (switched to .loc).

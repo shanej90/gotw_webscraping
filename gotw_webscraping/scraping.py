@@ -138,6 +138,10 @@ def retrieve_panel_decisions(url):
     
     #internal function to make tidying up the tables easier
     def tidy_tables(df):  
+        
+        #remove trailing column if there is one
+        if(df.shape[1]) == 7:
+            df = df.drop(df.columns[6], axis = 1)
             
         #headers
         df = df.rename(columns = df.iloc[0])
@@ -154,7 +158,7 @@ def retrieve_panel_decisions(url):
         df.columns = [tidy_columns(c) for c in df.columns.values.tolist()]
         
         #remove unncessary rows
-        df = df.drop([0, 2, 3, 4])   
+        df = df.loc[df["funding_priority_list"] == "Standard"]  
         
         #add columns for panel, meeting date and year
         df["panel"] = panel_name
