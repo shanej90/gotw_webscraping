@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.0.5
+
+- Corrected error in changing column names in `retrieve_panel_decisions`.
+- Corrected typo in name of function `retrieve_panel_decisions`.
+- Updated .ipynb file to make more compact.
+- Added functions from `scraping.py` at top-level of module.
+
 ## 0.0.4
 
 - Removed dependency on `skimpy` due to conflicts.

@@ -102,7 +102,7 @@ def get_panel_urls():
     return panel_urls
     
 #function to retrive details for each panel##########################################
-def retrieve_panel_decsions(url):
+def retrieve_panel_decisions(url):
     """Retrieve decision data for a specific panel.
     
     Once you have the URL for a page containing panel decisions, retrieve the data as a `pandas` DataFrame object.
@@ -151,7 +151,7 @@ def retrieve_panel_decsions(url):
             nochr = nopct.translate ({ord(c): "" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
             return nochr  
         
-        df = tidy_columns(df)
+        df.columns = tidy_columns(df)
         
         #remove unncessary rows
         df = df.drop([0, 2, 3, 4])   

@@ -1,7 +1,7 @@
 import unittest
 
-from gotw_webscraping.gotw_scraping import get_panel_urls
-from gotw_webscraping.gotw_scraping import retrieve_panel_decsions
+from gotw_webscraping.scraping import get_panel_urls
+from gotw_webscraping.scraping import retrieve_panel_decsions
 
 #test you get a list from the get_panel_list function
 class TestScrape(unittest.TestCase):
