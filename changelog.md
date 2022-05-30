@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.8 and 0.0.9
+
+- Attempts to correct error in column renaming function application - done properly second time around.
+
 ## 0.0.7
 
 - Corrected error in module naming convention.
