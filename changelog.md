@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.7
+
+- Corrected error in module naming convention.
+
 ## 0.0.6
 
 - forgot to save changes to `__init__.py`.

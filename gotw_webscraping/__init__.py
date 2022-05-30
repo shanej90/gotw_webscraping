@@ -1,2 +1,1 @@
-from scraping import get_panel_urls
-from scraping import retrieve_panel_decisions
+from .scraping import *
