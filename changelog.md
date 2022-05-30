@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.6
+
+- forgot to save changes to `__init__.py`.
+
 ## 0.0.5
 
 - Corrected error in changing column names in `retrieve_panel_decisions`.
