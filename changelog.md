@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.0.10
+
+- Changed method for filtering rows in `tidy_tables` function (switched to .loc).
+- Changed method for grabbing tables from URL to account for differing numbers of tables per page.
+
 ## 0.0.8 and 0.0.9
 
 - Attempts to correct error in column renaming function application - done properly second time around.
