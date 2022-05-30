@@ -151,7 +151,7 @@ def retrieve_panel_decisions(url):
             nochr = nopct.translate ({ord(c): "" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
             return nochr  
         
-        df.columns = tidy_columns(df)
+        df.columns = tidy_columns(df.columns.values.tolist())
         
         #remove unncessary rows
         df = df.drop([0, 2, 3, 4])   
