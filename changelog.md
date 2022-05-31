@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.0
+
+- Better handling of multiple table types.
+- Added panel id to output df for `retrieve_panel_decisions`.
+- Enabled customised start date for searching in `get_panel_urls`.
+- Included updated notebook which covers above changes.
+
 ## 0.0.11
 
 - Remembered to port changes from notebook this time.

@@ -13,17 +13,28 @@ from urllib import request
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
 
 #function to grab the panel urls#############################
-def get_panel_urls():
+def get_panel_urls(year, month, day, search_term = None):
     """Get a list of all panel urls available in  GotW panel search.
     
-    This function automatically sets search settings for panels as far back as they can go. It also sets up the webdriver. 
-    May be future functionality will be to add arguments to customise the timeframe.
+    This function searches for all panels listed from a user-specified start date until the date of running. It also sets up the webdriver. 
+    The function may be enhanced in future to customise the end date.
     IMPORTANT: The function works using an Edge webdriver, so you need to be Windows for this to work, and have MS Edge isntalled.
+    
+    Args:
+        year (int): Year from which to start searching.
+        month (int): Month in year from which to start searching
+        day (int): Day in month from which to start searching.
+        search_term: (str): Optionally, pass through a search term to further filter the list. 
     
     Returns
     -----
     A list of the panel urls.
     """
+    #error checking
+    
+    #convert year to match xpath option number
+    year_converted = year - 1999 #first year is 2000 and is option 1
+    
     #set the driver
     driver = webdriver.Edge(service = Service(EdgeChromiumDriverManager().install()))
     
@@ -37,9 +48,9 @@ def get_panel_urls():
     driver.find_element(by = By.XPATH, value = '//*[@id="oplDates_0"]').click()
     
     #then we need to pick the first day, month, year
-    day_xpath = '//*[@id="oUcStartDate_ddlDay"]/option[1]'
-    mon_xpath = '//*[@id="oUcStartDate_ddlMonth"]/option[1]'
-    yr_xpath = '//*[@id="oUcStartDate_ddlYear"]/option[1]'
+    day_xpath = f'//*[@id="oUcStartDate_ddlDay"]/option[{day}]'
+    mon_xpath = f'//*[@id="oUcStartDate_ddlMonth"]/option[{month}]'
+    yr_xpath = f'//*[@id="oUcStartDate_ddlYear"]/option[{year_converted}]'
     
     #now we have to click on those options
     driver.find_element(by = By.XPATH, value = '//*[@id="oUcStartDate_ddlDay"]').click() # open day slicer
@@ -50,6 +61,11 @@ def get_panel_urls():
     
     driver.find_element(by = By.XPATH, value = '//*[@id="oUcStartDate_ddlYear"]').click() # open day slicer
     WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, yr_xpath))).click() # choose the year
+    
+    #if search term is given, look for it
+    if search_term is not None:
+        panel_search = driver.find_element(by = By.XPATH, value = '//*[@id="txtPanelName"]') #click on the panel search webform
+        panel_search.send_keys(search_term)
     
     #so now all that's left to do is search
     driver.find_element(by = By.XPATH, value = '//*[@id="btnSearch"]').click()
@@ -128,12 +144,12 @@ def retrieve_panel_decisions(url):
     meeting_date = datetime.strptime(meeting_date, '%d %B %Y')
     
     #read tables to dataframe
-    tables = pd.read_html(url) #we're using the first one as an example here
+    tables = pd.read_html(url, match = "Funding Priority List") 
     
     #store relevant tables in a list
     tbl_list = [
-        tables[3], #by number
-        tables[5] #by value
+        tables[0], #by number
+        tables[1] #by value
         ]
     
     #internal function to make tidying up the tables easier
@@ -157,18 +173,36 @@ def retrieve_panel_decisions(url):
         
         df.columns = [tidy_columns(c) for c in df.columns.values.tolist()]
         
+        #rename success rate field if applicable
+        if df.shape[1] > 3:
+            df = df.rename(columns = {df.columns[5]: "success_rate"})
+        
         #remove unncessary rows
-        df = df.loc[df["funding_priority_list"] == "Standard"]  
+        if df.shape[1] > 3:
+             filter_out = ["Funding Priority List", "Standard", "Including:", "Please click on relevant Funding Priority List for a full rank ordered list."]
+             df = df.loc[~df.funding_priority_list.isin(filter_out)]
+        else:
+            df = df.iloc[[1]] 
         
         #add columns for panel, meeting date and year
         df["panel"] = panel_name
+        df["panel_id"] = url.split("PanelId=")[1]
         df["year"] = meeting_date.year
         df["month"] = meeting_date.month
-        df["day"] = meeting_date.day   
+        df["day"] = meeting_date.day  
         
-        #rename the funding rate column for conistency
-        df = df.rename(columns = {df.columns[5]: "success_rate"})   
-        
+        #change column types
+        if df.shape[1] > 8:
+            for c in ["funded", "unfunded", "referred_to_a_later_panel", "decision_still_awaited", "success_rate"]:
+                df[c] = pd.to_numeric(df[c])
+        else:
+            for c in ["full_proposals_invited", "full_proposals_declined"]:
+                df[c] = pd.to_numeric(df[c])        
+     
+        #calculate sr if needed
+        if df.shape[1] <= 8: 
+            df["success_rate"] = 100 * df["full_proposals_invited"] / (df["full_proposals_invited"] + df["full_proposals_declined"])
+            
         return df
     
     #list for tidied dfs
@@ -177,7 +211,11 @@ def retrieve_panel_decisions(url):
     #concat
     tidy_df = pd.concat(tidied_dfs)
     
-    #add on data type
-    tidy_df["data_type"] = ["number", "value"]
+    #get entries for data type field
+    numbers = ["number" for r in list(range(int(len(tidy_df) / 2)))]
+    values = ["value" for r in list(range(int(len(tidy_df) / 2)))]
     
+    #add data type field
+    tidy_df["data_type"] = numbers + values
+
     return tidy_df
